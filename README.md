@@ -1,84 +1,88 @@
-# Gestión de Empleados — Proyecto ejemplo
+# Sistema de Gestión de Empleados
 
 Resumen
-- Proyecto de ejemplo en Java para la gestión simple de empleados: modelos, lista de empleados, operaciones básicas y pruebas unitarias.
-- Incluye validaciones en la clase `Empleado`, un enum `Cargo`, una clase `Empleados` que encapsula la colección, y una aplicación principal `SistemaGestionEmpleados`.
-- Análisis de pruebas en `TESTING.md` y tests JUnit 5 en `src/test/java`.
+- Proyecto Java sencillo para gestionar empleados: modela empleados, cargos y operaciones básicas (alta, listado, aumentar salario).
+- Incluye validaciones y suite de pruebas JUnit 5 basada en análisis de caja negra (ver `TESTING.md`).
 
-Autor y versión
-- Autor: (indica tu nombre aquí)
-- Versión: 1.0-SNAPSHOT
+Metadatos
+| Campo | Valor |
+|---|---|
+| Proyecto | Sistema de Gestión de Empleados |
+| Versión | 1.0-SNAPSHOT |
+| Autor | (indicar nombre del autor) |
+| Licencia | MIT (ajustar si procede) |
 
-Requisitos previos
-- Java 11+ instalado y `java`/`javac` en PATH.
-- Para ejecutar tests con un gestor: Apache Maven instalado (`mvn` en PATH). Alternativa: usar el jar `junit-platform-console-standalone`.
+Estado del código
+- Código principal en `src/main/java/com/example/empleados`.
+- Tests JUnit 5 en `src/test/java/com/example/empleados`.
+- `pom.xml` incluido para construir y ejecutar tests con Maven.
 
-Cómo compilar y ejecutar (Windows PowerShell)
-1. Compilar y ejecutar sin Maven (rápido, para probar main):
-   - Compilar:
-     ```
-     cd /d d:\2EVALentornosARC
-     javac -d out src\main\java\com\example\empleados\*.java *.java
-     ```
-     (o compilar los .java en la raíz si existen)
-   - Ejecutar:
-     ```
-     java -cp out SistemaGestionEmpleados
-     ```
-2. Con Maven (recomendado si quieres ejecutar tests):
-   - Ejecutar:
-     ```
-     cd /d d:\2EVALentornosARC
-     mvn clean package
-     mvn test
-     ```
+Estructura del repositorio
+| Ruta | Descripción |
+|---|---|
+| `src/main/java/com/example/empleados/Empleado.java` | Clase modelo `Empleado` con validaciones y JavaDoc. |
+| `src/main/java/com/example/empleados/Empleados.java` | Clase que gestiona la colección de empleados (alta, aumento, listado). |
+| `src/main/java/com/example/empleados/Cargo.java` | Enum con los cargos profesionales posibles y utilidades de mapeo. |
+| `src/main/java/com/example/empleados/Constantes.java` | Constantes de UI y valores por defecto (incluye `CONVENIO`). |
+| `SistemaGestionEmpleados.java` | Clase con `main` que usa `Empleados` para ejecutar la demo. |
+| `src/test/java/com/example/empleados/EmpleadoValidationTest.java` | Tests JUnit 5 (casos válidos e inválidos definidos en `TESTING.md`). |
+| `TESTING.md` | Análisis de caja negra para `Empleado`. |
+| `pom.xml` | Descripción del proyecto y dependencias (JUnit 5). |
+| `README.md` | Este documento. |
 
-Ejecutar tests sin Maven (alternativa)
-- Descargar `junit-platform-console-standalone-<version>.jar` (ej. 1.9.3) y luego:
-  ```
-  # compilar clases
-  javac -d target\classes src\main\java\com\example\empleados\*.java
-  # compilar tests (ajusta ruta al jar)
-  javac -cp "target\classes;junit-platform-console-standalone-1.9.3.jar" -d target\test-classes src\test\java\com\example\empleados\*.java
-  # ejecutar tests
-  java -jar junit-platform-console-standalone-1.9.3.jar --class-path "target\classes;target\test-classes" --scan-class-path
-  ```
+Descripción del código (resumen)
+- Empleado
+  - Atributos: `nombre` (String), `cargo` (Cargo), `salario` (double).
+  - Validaciones: nombre no nulo/no vacío y >= 2 palabras; cargo no nulo y debe pertenecer al enum; salario finito, >= 0 y >= convenio (`Constantes.CONVENIO`).
+  - Getters/setters y `toString()` con formato consistente.
+- Empleados
+  - Atributo `lista` (array de `Empleado`) y `size`.
+  - Métodos: `darAltaEmpleado(Empleado)`, `aumentarSalario(double porcentaje)`, `mostrarListado()`.
+- Cargo
+  - Enum con valores predefinidos (DESARROLLADOR, DISENADORA, GERENTE, ANALISTA, TESTER).
+  - Método `fromString(String)` tolerante a mayúsculas/acento para mapear textos.
+- Constantes
+  - Textos UI, formatos y valores por defecto (`CONVENIO`, `DEFAULT_CAPACITY`, etc.).
 
-Estructura del repositorio (resumen)
-- pom.xml — configuración Maven y dependencias (JUnit 5).
-- src/main/java/com/example/empleados/
-  - Cargo.java — enum con los cargos permitidos y mapeo desde texto.
-  - Empleado.java — modelo con validaciones (nombre, cargo, salario) y getters/setters.
-  - Empleados.java — clase que gestiona la colección (`lista`) y operaciones (alta, aumentar salario, mostrar).
-  - Constantes.java — textos y números fijos centralizados.
-- SistemaGestionEmpleados.java — aplicación principal (main) que usa `Empleados`.
-- src/test/java/com/example/empleados/
-  - EmpleadoValidationTest.java — tests JUnit 5 (casos válidos e inválidos según TESTING.md).
-- TESTING.md — análisis de caja negra (parámetros, casos válidos / no válidos).
+Requisitos y dependencias
+- Java 11+ (ajustar en `pom.xml` si es necesario).
+- Maven (recomendado) para compilar y ejecutar tests.
+  - Alternativa: compilar con `javac` y ejecutar tests con `junit-platform-console-standalone.jar`.
 
-Documentación (Javadoc)
-- Las clases principales incluyen JavaDoc. Para generar HTML con Maven:
-  ```
-  mvn javadoc:javadoc
-  ```
-  El resultado se encontrará en `target/site/apidocs`.
+Comandos habituales (Maven)
+| Acción | Comando |
+|---|---|
+| Compilar | mvn -q compile |
+| Ejecutar la aplicación (desde la raíz si `SistemaGestionEmpleados` está compilada) | mvn -q exec:java -Dexec.mainClass="SistemaGestionEmpleados" (requiere plugin exec o ejecutar con java) |
+| Ejecutar tests | mvn -q test |
 
-Notas sobre las validaciones
-- Nombre: no nulo, no vacío y al menos dos palabras.
-- Cargo: debe ser un valor del enum `Cargo` (uso de `Cargo.fromString` para mapeo).
-- Salario: finito, >= 0 y >= CONVENIO (Constantes.CONVENIO = 15000.0 por defecto).
+Instrucciones rápidas (sin Maven)
+1. Compilar clases:
+   - javac -d out src\main\java\com\example\empleados\*.java SistemaGestionEmpleados.java
+2. Compilar tests (descargar junit-platform-console-standalone si es necesario) y ejecutar con el jar.
 
-Consejos para evitar errores al ejecutar tests
-- Asegurarse de tener Maven en PATH (`mvn -v`).
-  - Instalar en Windows con winget: `winget install --id Apache.Maven -e`
-  - O descargar desde https://maven.apache.org/download.cgi y añadir `bin` al PATH.
-- En VS Code instalar Java Extension Pack y Java Test Runner para ejecutar tests desde el IDE.
+Tests y calidad
+- Todos los casos del `TESTING.md` están implementados en `EmpleadoValidationTest.java` (V1–V6 válidos y N1–N10 inválidos).
+- Los tests verifican la política de validación para `nombre`, `cargo` y `salario`.
+- Ejecutar `mvn test` para ver resultados. Si Maven no está disponible, usar la alternativa con `junit-platform-console-standalone.jar` (ver instrucciones en `TESTING.md` y en los comentarios del proyecto).
 
-Contribución
-- Abrir un issue o enviar pull request con pequeñas mejoras (validaciones adicionales, i18n, encapsulación de `lista`).
+Uso rápido
+1. Abrir terminal en la raíz del proyecto.
+2. Compilar con Maven: `mvn compile`.
+3. Ejecutar: compilar y lanzar `SistemaGestionEmpleados` o ejecutar desde IDE.
+4. Para pruebas: `mvn test`.
+
+Notas y recomendaciones
+- Ajusta `Constantes.CONVENIO` si el convenio real difiere de 15000.
+- Para internacionalización futura, reemplazar `Constantes` por archivos `messages_*.properties`.
+- Considerar encapsular `Empleados.lista` (hacer privado) y exponer acceso inmutable si se busca mejor encapsulación.
+
+Cómo contribuir
+- Fork, crear rama feature, abrir PR con descripción de cambios y tests asociados.
+- Mantener tests verdes y actualizar `TESTING.md` si las reglas de validación cambian.
+
+Contacto / Autoría
+- Añadir tus datos de contacto y/o enlace GitHub aquí.
 
 Licencia
-- Indica aquí la licencia deseada (p. ej. MIT) o elimina esta sección.
-
-Fin
-- Para cualquier cambio que quieras que aplique en el repositorio (añadir más tests, convertir `lista` en privada con iterador, internacionalización, etc.), indica la tarea y
+- Incluir fichero `LICENSE` si es necesario; por defecto se propone MIT.
